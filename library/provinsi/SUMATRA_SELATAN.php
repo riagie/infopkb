@@ -37,13 +37,13 @@ class SUMATRA_SELATAN
             //     'WILAYAH'       => $textParts[],
             //     'TGL_PAJAK'     => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[]),
             //     'TGL_STNK'      => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[]),
-            //     'PKB_POKOK'     => (int) $textParts[],
-            //     'PKB_DENDA'     => (int) $textParts[],
-            //     'SWDKLLJ_POKOK' => (int) $textParts[],
-            //     'SWDKLLJ_DENDA' => (int) $textParts[],
-            //     'PNPB_STNK'     => (int) $textParts[],
-            //     'PNPB_DENDA'    => (int) $textParts[],
-            //     'TOTAL'         => (int) $textParts[],
+            //     'PKB_POKOK'     => (int) str_replace(['.', ','], '', $textParts[]),
+            //     'PKB_DENDA'     => (int) str_replace(['.', ','], '', $textParts[]),
+            //     'SWDKLLJ_POKOK' => (int) str_replace(['.', ','], '', $textParts[]),
+            //     'SWDKLLJ_DENDA' => (int) str_replace(['.', ','], '', $textParts[]),
+            //     'PNPB_STNK'     => (int) str_replace(['.', ','], '', $textParts[]),
+            //     'PNPB_DENDA'    => (int) str_replace(['.', ','], '', $textParts[]),
+            //     'TOTAL'         => (int) str_replace(['.', ','], '', $textParts[]),
             // ];
 
             // Validate and return response data

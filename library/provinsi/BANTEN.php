@@ -13,9 +13,9 @@ class BANTEN
     {
         // Prepare request data
         $requestData = [
-            'kode'  => $data['KODE_WILAYAH'],
+            'kode' => $data['KODE_WILAYAH'],
             'nomor' => $data['NOMOR_POLISI'],
-            'seri'  => $data['KODE_PENDAFTARAN']
+            'seri' => $data['KODE_PENDAFTARAN']
         ];
 
         // Send request and get response
@@ -60,13 +60,13 @@ class BANTEN
                 // 'WILAYAH'       => $textParts[],
                 'TGL_PAJAK'     => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[47]),
                 'TGL_STNK'      => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[51]),
-                'PKB_POKOK'     => (int) $textParts[59],
-                'PKB_DENDA'     => (int) $textParts[63],
-                'SWDKLLJ_POKOK' => (int) $textParts[67],
-                'SWDKLLJ_DENDA' => (int) $textParts[71],
-                'PNPB_STNK'     => (int) $textParts[83],
-                // 'PNPB_DENDA'    => (int) $textParts[],
-                'TOTAL'         => (int) $textParts[87],
+                'PKB_POKOK'     => (int) str_replace(['.', ','], '', $textParts[59]),
+                'PKB_DENDA'     => (int) str_replace(['.', ','], '', $textParts[63]),
+                'SWDKLLJ_POKOK' => (int) str_replace(['.', ','], '', $textParts[67]),
+                'SWDKLLJ_DENDA' => (int) str_replace(['.', ','], '', $textParts[71]),
+                'PNPB_STNK'     => (int) str_replace(['.', ','], '', $textParts[83]),
+                // 'PNPB_DENDA'    => (int) str_replace(['.', ','], '', $textParts[]),
+                'TOTAL'         => (int) str_replace(['.', ','], '', $textParts[87]),
             ];
 
             // Validate and return response data
