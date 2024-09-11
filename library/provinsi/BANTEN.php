@@ -21,6 +21,10 @@ class BANTEN
         // Send request and get response
         $response = Curl::request($_ENV['BANTEN'], 'POST', $requestData);
 
+        if (strpos($response, 'DATA KENDARAAN TIDAK ADA!') == true) {
+            return null;
+        }
+        
         // Check if response is valid
         if ($response && !is_null($response) && $response !== false) {
             $dom = new DOMDocument();
@@ -39,7 +43,7 @@ class BANTEN
                     $textParts[] = $text;
                 }
             }
-
+            
             // Map extracted data to response data
             $responseData = [
                 'MERK'          => $textParts[18],
@@ -50,7 +54,7 @@ class BANTEN
                 'CC'            => (int) (explode(' / ', $textParts[34])[1]),
                 'BBM'           => explode(' / ', $textParts[34])[2],
                 'PLAT'          => $textParts[42],
-                'NO_POLISI'     => implode('', $requestData),
+                'NO_POLISI'     => implode('', $data),
                 'NO_RANGKA'     => $textParts[30],
                 'NO_MESIN'      => explode(' / ', $textParts[31])[1],
                 'NAMA_PEMILIK'  => $textParts[12],
@@ -60,13 +64,13 @@ class BANTEN
                 // 'WILAYAH'       => $textParts[],
                 'TGL_PAJAK'     => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[47]),
                 'TGL_STNK'      => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[51]),
-                'PKB_POKOK'     => (int) str_replace(['.', ','], '', $textParts[59]),
-                'PKB_DENDA'     => (int) str_replace(['.', ','], '', $textParts[63]),
-                'SWDKLLJ_POKOK' => (int) str_replace(['.', ','], '', $textParts[67]),
-                'SWDKLLJ_DENDA' => (int) str_replace(['.', ','], '', $textParts[71]),
-                'PNPB_STNK'     => (int) str_replace(['.', ','], '', $textParts[83]),
-                // 'PNPB_DENDA'    => (int) str_replace(['.', ','], '', $textParts[]),
-                'TOTAL'         => (int) str_replace(['.', ','], '', $textParts[87]),
+                'PKB_POKOK'     => (int) preg_replace('/\D/', '', $textParts[59]),
+                'PKB_DENDA'     => (int) preg_replace('/\D/', '', $textParts[63]),
+                'SWDKLLJ_POKOK' => (int) preg_replace('/\D/', '', $textParts[67]),
+                'SWDKLLJ_DENDA' => (int) preg_replace('/\D/', '', $textParts[71]),
+                'PNPB_STNK'     => (int) preg_replace('/\D/', '', $textParts[75]),
+                'PNPB_DENDA'    => (int) preg_replace('/\D/', '', $textParts[79]),
+                'TOTAL'         => (int) preg_replace('/\D/', '', $textParts[87]),
             ];
 
             // Validate and return response data

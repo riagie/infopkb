@@ -4,50 +4,77 @@ namespace App\Library\Provinsi;
 
 use App\Helpers\Curl;
 use App\Helpers\ResponseValidator;
+use DOMDocument;
+use DOMXPath;
 
 class KALIMANTAN_TENGAH
 {
     public static function process(array $data): ?array
     {
         // Prepare request data
+        $requestData = [
+            'nomor' => $data['NOMOR_POLISI'],
+            'seri' => $data['KODE_PENDAFTARAN'],
+            'index' => '',
+        ];
 
         // Send request and get response
         $response = Curl::request($_ENV['KALIMANTAN_TENGAH'], 'POST', $requestData);
 
+        if (strpos($response, 'DATA KENDARAAN TIDAK ADA') == true) {
+            return null;
+        }
+
         // Check if response is valid
         if ($response && !is_null($response) && $response !== false) {
+            $dom = new DOMDocument();
+            libxml_use_internal_errors(true);
+            $dom->loadHTML($response);
+            libxml_clear_errors();
 
+            $xpath = new DOMXPath($dom);
+            $nodes = $xpath->query('//body//text()');
+
+            // Extract text parts from response
+            $textParts = [];
+            foreach ($nodes as $node) {
+                $text = trim($node->nodeValue);
+                if (!empty($text)) {
+                    $textParts[] = $text;
+                }
+            }
+            
             // Map extracted data to response data
-            // $responseData = [
-            //     'MERK'          => $textParts[],
-            //     'MODEL'         => $textParts[],
-            //     'JENIS'         => $textParts[],
-            //     'TAHUN'         => (int) $textParts[],
-            //     'WARNA'         => $textParts[],
-            //     'CC'            => (int) $textParts[],
-            //     'BBM'           => $textParts[],
-            //     'PLAT'          => $textParts[],
-            //     'NO_POLISI'     => implode('', $requestData),
-            //     'NO_RANGKA'     => $textParts[],
-            //     'NO_MESIN'      => $textParts[],
-            //     'NAMA_PEMILIK'  => $textParts[],
-            //     'ALAMAT'        => $textParts[],
+            $responseData = [
+                'MERK'          => $textParts[18],
+                'MODEL'         => $textParts[22],
+                'JENIS'         => $textParts[26],
+                'TAHUN'         => (int) (explode(' / ', $textParts[34])[0]),
+                'WARNA'         => $textParts[38],
+                'CC'            => (int) (explode(' / ', $textParts[34])[1]),
+                'BBM'           => explode(' / ', $textParts[34])[2],
+                'PLAT'          => $textParts[42],
+                'NO_POLISI'     => implode('', $data),
+                'NO_RANGKA'     => $textParts[30],
+                'NO_MESIN'      => explode(' / ', $textParts[31])[1],
+                'NAMA_PEMILIK'  => $textParts[12],
+                'ALAMAT'        => $textParts[15],
 
-            //     'MILIK_KE'      => (int) $textParts[],
-            //     'WILAYAH'       => $textParts[],
-            //     'TGL_PAJAK'     => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[]),
-            //     'TGL_STNK'      => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[]),
-            //     'PKB_POKOK'     => (int) str_replace(['.', ','], '', $textParts[]),
-            //     'PKB_DENDA'     => (int) str_replace(['.', ','], '', $textParts[]),
-            //     'SWDKLLJ_POKOK' => (int) str_replace(['.', ','], '', $textParts[]),
-            //     'SWDKLLJ_DENDA' => (int) str_replace(['.', ','], '', $textParts[]),
-            //     'PNPB_STNK'     => (int) str_replace(['.', ','], '', $textParts[]),
-            //     'PNPB_DENDA'    => (int) str_replace(['.', ','], '', $textParts[]),
-            //     'TOTAL'         => (int) str_replace(['.', ','], '', $textParts[]),
-            // ];
+                // 'MILIK_KE'      => (int) $textParts[],
+                // 'WILAYAH'       => $textParts[],
+                'TGL_PAJAK'     => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[47]),
+                'TGL_STNK'      => preg_replace('/(\d{2})-(\d{2})-(\d{4})/', '$3$2$1', $textParts[51]),
+                'PKB_POKOK'     => (int) preg_replace('/\D/', '', $textParts[59]),
+                'PKB_DENDA'     => (int) preg_replace('/\D/', '', $textParts[63]),
+                'SWDKLLJ_POKOK' => (int) preg_replace('/\D/', '', $textParts[67]),
+                'SWDKLLJ_DENDA' => (int) preg_replace('/\D/', '', $textParts[71]),
+                'PNPB_STNK'     => (int) preg_replace('/\D/', '', $textParts[83]),
+                'PNPB_DENDA'    => (int) preg_replace('/\D/', '', $textParts[87]),
+                'TOTAL'         => (int) preg_replace('/\D/', '', $textParts[91]),
+            ];
 
             // Validate and return response data
-            // return ResponseValidator::validate($responseData);
+            return ResponseValidator::validate($responseData);
         }
 
         return null;

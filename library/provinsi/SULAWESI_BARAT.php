@@ -10,7 +10,10 @@ class SULAWESI_BARAT
     public static function process(array $data): ?array
     {
         // Prepare request data
-
+        $requestData = [
+            'no_polisi' => $data['KODE_WILAYAH'] . $data['NOMOR_POLISI'] . $data['KODE_PENDAFTARAN']
+        ];
+        
         // Send request and get response
         $response = Curl::request($_ENV['SULAWESI_BARAT'], 'POST', $requestData);
 
