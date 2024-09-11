@@ -3,8 +3,6 @@
 /**
  * Configure routes
  */
-$_SERVER["REQUEST_URI"] = str_replace("/_project_infopkb", "", $_SERVER["REQUEST_URI"]);
-
 $app->get('/detail/{nopol}', function ($nopol) use ($app, $regional) {
     $nopol = preg_replace('/[^a-zA-Z0-9]/', '', $nopol);
     preg_match('/^([a-zA-Z]+)(\d+)([a-zA-Z]*)$/', $nopol, $matches);
@@ -108,7 +106,7 @@ $app->notFound(function () use ($app) {
     return $app->response
         ->setStatusCode(404)
         ->setJsonContent([
-            'RC' => '0404', 
+            'RC' => '0404',
             'RCM' => 'NOT FOUND'
         ])
         ->send();
