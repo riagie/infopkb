@@ -4,9 +4,34 @@
 #### Information results
 ```
 {
-    "RC": status,
-    "RCM": "messages"
-    "DATA": "result"
+    "RC": "0200",
+    "RCM": "SUCCESS",
+    "DATA": {
+        "MERK": "YAMAHA",
+        "MODEL": "T 105 ER VEGA R",
+        "JENIS": "SEPEDA MOTOR",
+        "TAHUN": 2004,
+        "WARNA": "HITAM",
+        "CC": 102,
+        "BBM": "BENSIN",
+        "PLAT": "PUTIH",
+        "NO_POLISI": "XXXXXXXX",
+        "NO_RANGKA": "MH3XXXXXXXXXXXXXXXXX0",
+        "NO_MESIN": "4STXXXXXXXXXXX7",
+        "NAMA_PEMILIK": "SXXXXXXXXXXXXXXXN",
+        "ALAMAT": "PT.XXXXXXXXXXXXXXXXXXXXXXXXXIM",
+        "MILIK_KE": "",
+        "WILAYAH": "",
+        "TGL_PAJAK": "20120330",
+        "TGL_STNK": "20140330",
+        "PKB_POKOK": 7200000,
+        "PKB_DENDA": 72000,
+        "SWDKLLJ_POKOK": 540000,
+        "SWDKLLJ_DENDA": 78900,
+        "PNPB_STNK": 100000,
+        "PNPB_DENDA": 60000,
+        "TOTAL": 1097900
+    }
 }
 ```
 
