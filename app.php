@@ -74,6 +74,15 @@ $app->get('/detail/{nopol}', function ($nopol) use ($app, $regional) {
 });
 
 $app->get('/regional', function () use ($app, $regional) {
+    foreach ($regional as $key => $value) {
+        $value['STATUS'] = 'DISABLE';
+        if ($_ENV[$value['NAMA_PROVINSI']]) {
+            $value['STATUS'] = 'ENABLE';
+        }
+
+        $regional[$key] = $value;
+    }
+
     return $app->response
         ->setStatusCode(200)
         ->setJsonContent([
